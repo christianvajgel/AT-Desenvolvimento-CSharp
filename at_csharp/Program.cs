@@ -38,6 +38,7 @@ namespace at_csharp
 
             var id = 0;
             var resultList = Enumerable.Empty<Person>();
+            var repository = new Repository();
             while (true)
             {
                 ShowMenu();
@@ -57,7 +58,7 @@ namespace at_csharp
                                 ShowMenuSearchPeople();
                                 var firstName = ReadString("firstName");
                                 var surname = ReadString("surname");
-                                resultList = Repository.SearchPeople(firstName, surname);
+                                resultList = repository.SearchPeople(firstName, surname);
                                 Loading();
                                 if (resultList.Any())
                                 {
@@ -69,13 +70,13 @@ namespace at_csharp
                                     Console.WriteLine($"Choose de ID of the desired " +
                                                       $"person to check the countdown.\n");
                                     var numberID = ReadNumber("id", resultList);
-                                    var countdown = DateCountdown(numberID);
+                                    var countdown = repository.DateCountdown(numberID);
                                     var verb = "are";
                                     var dayWord = "days";
                                     if (countdown == 1) { verb = "is"; dayWord = "day"; }
                                     ClearScreen(false);
                                     Console.WriteLine($"There {verb} {countdown} {dayWord} " +
-                                                      $"before {PersonFullName(numberID)}'s birthday.");
+                                                      $"before {repository.PersonFullName(numberID)}'s birthday.");
                                 }
                                 else
                                 {
@@ -119,7 +120,7 @@ namespace at_csharp
                                     return finalDate;
                                 })();
                                 var person = new Person(id, firstName, surname, birthday);
-                                var message = Repository.AddPerson(person);
+                                var message = repository.AddPerson(person);
 
                                 if (message.Equals("Person added.")) { id++; }
                                 Console.WriteLine(message);
@@ -255,8 +256,8 @@ namespace at_csharp
             {
                 Console.WriteLine($"ID: {result.Id}\n" +
                                   $"Name: {result.FirstName}\n" +
-                                  $"Surname: {result.SurnameName}\n" +
-                                  $"Birthday: {result.Birthday}\n" +
+                                  $"Surname: {result.Surname}\n" +
+                                  $"Birthday: {result.Birthday.ToShortDateString()}\n" +
                                   $"\n- - - - - - - - - - - - - - - - - - - - - -\n");
             }
         }

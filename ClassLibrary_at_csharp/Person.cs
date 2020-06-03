@@ -10,7 +10,7 @@ namespace ClassLibrary_at_csharp
         {
             Id = id;
             FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
-            SurnameName = surnameName ?? throw new ArgumentNullException(nameof(surnameName));
+            Surname = surnameName ?? throw new ArgumentNullException(nameof(surnameName));
             Birthday = birthday;
         }
 
@@ -18,7 +18,7 @@ namespace ClassLibrary_at_csharp
 
         public string FirstName { get; set; }
 
-        public string SurnameName { get; set; }
+        public string Surname { get; set; }
 
         public DateTime Birthday { get; set; }
     }
