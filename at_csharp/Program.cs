@@ -39,11 +39,12 @@ namespace at_csharp
             var id = 0;
             var resultList = Enumerable.Empty<Person>();
             var repository = new Repository();
+            TextFile.InitializeTextFile();
             while (true)
             {
                 ShowMenu();
                 var operation = ReadNumber("menu", resultList);
-                if (operation.Equals("3"))
+                if (operation.Equals("5"))
                 {
                     break;
                 }
@@ -128,6 +129,12 @@ namespace at_csharp
                                 break;
                             };
                             break;
+                        case "3":
+                            // edit
+                            break;
+                        case "4":
+                            // delete
+                            break;
                     }
                 }
             }
@@ -135,11 +142,15 @@ namespace at_csharp
 
         public static void ShowMenu()
         {
+            
+            Console.WriteLine("\n");
             Console.WriteLine("\n*** C# Birthday Manager ***\n\n  " +
                                         "Select an option:\n    " +
                                         "1- Search people\n    " +
                                         "2- Add people\n    " +
-                                        "3- EXIT\n\n");
+                                        "3- Edit people\n    " +
+                                        "4- Delete people\n    " +
+                                        "5- EXIT\n\n");
         }
 
         public static void ShowMenuAddPeople()
@@ -158,7 +169,7 @@ namespace at_csharp
             {
                 return option switch
                 {
-                    "menu" => InputLoopNumber("1", "3", "operation", resultList),
+                    "menu" => InputLoopNumber("1", "5", "operation", resultList),
                     "day" => InputLoopNumber("1", "31", "day", resultList),
                     "month" => InputLoopNumber("1", "12", "month", resultList),
                     "year" => InputLoopNumber("1", "9999", "year", resultList),

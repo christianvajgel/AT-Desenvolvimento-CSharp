@@ -14,7 +14,9 @@ namespace ClassLibrary_at_csharp
             return new Func<String>(() =>
             {
                 if (CheckContactExistence(person)) { return "Person already exists."; }
-                else { people.Add(person); return "Person added."; }
+                else { 
+                    //people.Add(person); return "Person added."; }
+                    people.Add(person); return TextFile.AppendTextToFile(person); }
             })();
         }
 
@@ -107,7 +109,7 @@ namespace ClassLibrary_at_csharp
             return $"{person.FirstName} {person.Surname}";
         }
 
-        private Boolean CheckContactExistence(Person person)
+        public static Boolean CheckContactExistence(Person person)
         {
             return new Func<Boolean>(() =>
             {
