@@ -36,10 +36,13 @@ namespace at_csharp
             const string UNDERLINE = "\x1B[4m";
             const string RESET = "\x1B[0m";
 
-            var id = 0;
+            // *******************************************************************************
+
+            TextFile.ReadTextFile();
+            var id = TextFile.CheckCurrentId();
             var resultList = Enumerable.Empty<Person>();
             var repository = new Repository();
-            TextFile.InitializeTextFile();
+
             while (true)
             {
                 ShowMenu();
@@ -60,7 +63,7 @@ namespace at_csharp
                                 var firstName = ReadString("firstName");
                                 var surname = ReadString("surname");
                                 resultList = repository.SearchPeople(firstName, surname);
-                                Loading();
+                                //Loading();
                                 if (resultList.Any())
                                 {
                                     ClearScreen(false);
@@ -120,6 +123,7 @@ namespace at_csharp
                                     } while (DateValidation(completeDate) == default);
                                     return finalDate;
                                 })();
+                                //var person = new Person(Guid.NewGuid(), firstName, surname, birthday);
                                 var person = new Person(id, firstName, surname, birthday);
                                 var message = repository.AddPerson(person);
 
@@ -142,7 +146,6 @@ namespace at_csharp
 
         public static void ShowMenu()
         {
-            
             Console.WriteLine("\n");
             Console.WriteLine("\n*** C# Birthday Manager ***\n\n  " +
                                         "Select an option:\n    " +
@@ -173,7 +176,7 @@ namespace at_csharp
                     "day" => InputLoopNumber("1", "31", "day", resultList),
                     "month" => InputLoopNumber("1", "12", "month", resultList),
                     "year" => InputLoopNumber("1", "9999", "year", resultList),
-                    "id" => InputLoopNumber("0", (Repository.people.Count() - 1).ToString(), "ID number", resultList),
+                    "id" => InputLoopNumber("0", (TextFile.peopleFromTextFile.Count() - 1).ToString(), "ID number", resultList),
                     _ => null,
                 };
             })();

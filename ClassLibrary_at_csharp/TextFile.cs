@@ -9,21 +9,27 @@ namespace ClassLibrary_at_csharp
 {
     public class TextFile
     {
-        public static List<Person> textFileData = new List<Person>();
+        //public static List<Person> textFileData = new List<Person>();
         public static List<Person> peopleFromTextFile = new List<Person>();
 
-        public static void InitializeTextFile()
-        {
-            if (ReadTextFile() != null)
-            {
-                peopleFromTextFile = ReadTextFile();
-                foreach (var p in peopleFromTextFile)
-                {
-                    Console.WriteLine($"{p.Id} {p.FirstName} {p.Surname} {p.Birthday}\n");
-                }
-                Console.WriteLine(peopleFromTextFile.Count());
-            }
+        //public static void InitializeTextFile()
+        //{
+        //    //if (ReadTextFile() != null)
+        //    //{
+        //    //peopleFromTextFile = ReadTextFile();
+        //    //ReadTextFile();
+        //        foreach (var p in peopleFromTextFile)
+        //        {
+        //            Console.WriteLine($"{p.Id} {p.FirstName} {p.Surname} {p.Birthday}\n");
+        //        }
+        //        Console.WriteLine(peopleFromTextFile.Count());
+        //    //}
 
+        //}
+
+        public static int CheckCurrentId() 
+        {
+            return (peopleFromTextFile.Count == 0) ?  0 : peopleFromTextFile.Count;
         }
 
         private static string GetFileName()
@@ -35,7 +41,7 @@ namespace ClassLibrary_at_csharp
         public static string AppendTextToFile(Person person)
         {
             var fileName = GetFileName();
-            var pattern = $"{person.Id},{person.FirstName},{person.Surname},{person.Birthday.ToShortDateString()}";
+            var pattern = $"{person.Id},{person.FirstName},{person.Surname},{person.Birthday.ToShortDateString()};";
             try
             {
                 File.AppendAllText(fileName, pattern);
@@ -49,40 +55,38 @@ namespace ClassLibrary_at_csharp
         }
 
         // READ
-        public static List<Person> ReadTextFile()
+        //public static List<Person> ReadTextFile()
+        public static void ReadTextFile()
         {
             FileStream fileStream;
             if (!File.Exists(GetFileName()))
             {
                 fileStream = File.Create(GetFileName());
                 fileStream.Close();
-                return null;
+                //return null;
             }
             var textFileSplitted = File.ReadAllText(GetFileName()).Split(';');
 
             //for (var i = 0; i < textFileSplitted.Length - 1; i++) 
-            for (var i = 0; i < textFileSplitted.Length; i++)
+            for (var i = 0; i < textFileSplitted.Length - 1; i++)
             {
                 var peopleData = textFileSplitted[i].Split(',');
-                var dt = peopleData[3];
-                if (dt.EndsWith('0') && !dt[6].Equals('/'))
-                {
-                    dt = dt.Remove(dt.Length - 1);
-                }
+                //var dt = peopleData[3];
+                //if (dt.EndsWith('0') && !dt[6].Equals('/'))
+                //{
+                //    dt = dt.Remove(dt.Length - 1);
+                //}
 
-                textFileData.Add(new Person(
-                                      Parsing.StringToInt(peopleData[0])[0],
-                                      peopleData[1],
-                                      peopleData[2],
-                                      //DateTime.Parse(peopleData[3])));
-                                      Convert.ToDateTime(dt)));
+                //textFileData.Add(new Person(
+                peopleFromTextFile.Add(new Person(
+                                       Parsing.StringToInt(peopleData[0])[0],
+                                       peopleData[1],
+                                       peopleData[2],
+                                       //DateTime.Parse(peopleData[3])));
+                                       Convert.ToDateTime(peopleData[3])));
+                                       //Convert.ToDateTime(dt)));
             }
-
-            //foreach (var p in peopleFromTextFile)
-            //{
-            //    Console.WriteLine($"{p.Id} {p.FirstName} {p.Surname} {p.Birthday}\n");
-            //}
-            return textFileData;
+            //return textFileData;
         }
 
         // UPDATE

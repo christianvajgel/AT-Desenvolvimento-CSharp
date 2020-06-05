@@ -26,19 +26,19 @@ namespace ClassLibrary_at_csharp
             throw new NotImplementedException();
         }
 
-        // UPDATE
-        public string UpdatePerson(Person person, Person updated)
+        // UPDATE - create menu - show list 
+        public string UpdatePerson(Person person, int id)
         {
             return new Func<String>(() =>
             {
-                if (CheckContactExistence(person))
+                var result = SearchPerson(id);
+                if (CheckContactExistence(result))
                 {
-                    people.Remove(person);
-                    people.Add(updated);
-                    return $"Contact updated successfully.\nOld data:\n {person.FirstName} " +
-                           $"{person.Surname} | Birthday: {person.Birthday.ToShortDateString()}" +
-                           $"\nNew data:\n {updated.FirstName} {updated.Surname} " +
-                           $"| Birthday: {updated.Birthday.ToShortDateString()}";
+                    TextFile.peopleFromTextFile[result.Id] = person;
+                    return $"Contact updated successfully.\nOld data:\n {result.FirstName} " +
+                           $"{result.Surname} | Birthday: {result.Birthday.ToShortDateString()}" +
+                           $"\nNew data:\n {person.FirstName} {person.Surname} " +
+                           $"| Birthday: {person.Birthday.ToShortDateString()}";
                 }
                 else
                 {
@@ -47,19 +47,20 @@ namespace ClassLibrary_at_csharp
             })();
         }
 
-        // DELETE
+        // DELETE - create menu - change everyone ID after delete process
         public string DeletePerson(Person person)
         {
             return new Func<String>(() =>
             {
-                if (CheckContactExistence(person))
+                var result = SearchPerson(person.Id);
+                if (result != null && result == person)
                 {
-                    people.Remove(person);
+                    TextFile.peopleFromTextFile.Remove(person);
                     return $"{person.FirstName} {person.Surname} successfully deleted.";
                 }
                 else
                 {
-                    return "Person added.";
+                    return "Person does not exists.";
                 }
             })();
         }
@@ -67,7 +68,7 @@ namespace ClassLibrary_at_csharp
         // Search for keywords
         public IEnumerable<Person> SearchPeople(string termFirstName, string termSurname)
         {
-            return people.Where(person =>
+            return TextFile.peopleFromTextFile.Where(person =>
                 person.FirstName.Contains(termFirstName, StringComparison.InvariantCultureIgnoreCase) ||
                 person.Surname.Contains(termSurname, StringComparison.InvariantCultureIgnoreCase));
         }
@@ -86,14 +87,21 @@ namespace ClassLibrary_at_csharp
             return new Func<int>(() => { return CalculateDays(SearchPerson(Parsing.StringToInt(id)[0])); })();
         }
 
-        public Person SearchPerson(int id)
+        public static Person SearchPerson(int id)
         {
-            var PersonObject = new Person();
-            foreach (var match in people)
+            //var PersonObject = new Person();
+            foreach (var match in TextFile.peopleFromTextFile)
             {
-                if (match.Id == id) { PersonObject = people[match.Id]; }
+                if (match.Id == id) { return TextFile.peopleFromTextFile[match.Id]; }
             }
-            return PersonObject;
+            return null;
+
+            //var PersonObject = new Person();
+            //foreach (var match in people)
+            //{
+            //    if (match.Id == id) { PersonObject = people[match.Id]; }
+            //}
+            //return PersonObject;
         }
 
         public int CalculateDays(Person person)
@@ -113,11 +121,12 @@ namespace ClassLibrary_at_csharp
         {
             return new Func<Boolean>(() =>
             {
-                foreach (var match in people)
+                foreach (var match in TextFile.peopleFromTextFile)
                 {
                     if (match.FirstName.Equals(person.FirstName)
                         && match.Surname.Equals(person.Surname)
-                        && match.Birthday.Equals(person.Birthday))
+                        && match.Birthday.Equals(person.Birthday)
+                        && match == person)
                     {
                         return true;
                     }
