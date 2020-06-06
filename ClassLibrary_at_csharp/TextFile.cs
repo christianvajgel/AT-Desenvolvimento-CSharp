@@ -10,8 +10,7 @@ namespace ClassLibrary_at_csharp
     public class TextFile
     {
         //public static List<Person> textFileData = new List<Person>();
-        public static List<Person> peopleFromTextFile = new List<Person>();
-
+        //public static List<Person> peopleFromTextFile = new List<Person>();
         //public static void InitializeTextFile()
         //{
         //    //if (ReadTextFile() != null)
@@ -29,7 +28,7 @@ namespace ClassLibrary_at_csharp
 
         public static int CheckCurrentId() 
         {
-            return (peopleFromTextFile.Count == 0) ?  0 : peopleFromTextFile.Count;
+            return (Repository.peopleFromTextFile.Count == 0) ?  0 : Repository.peopleFromTextFile.Count;
         }
 
         private static string GetFileName()
@@ -78,7 +77,7 @@ namespace ClassLibrary_at_csharp
                 //}
 
                 //textFileData.Add(new Person(
-                peopleFromTextFile.Add(new Person(
+                Repository.peopleFromTextFile.Add(new Person(
                                        Parsing.StringToInt(peopleData[0])[0],
                                        peopleData[1],
                                        peopleData[2],
@@ -89,27 +88,44 @@ namespace ClassLibrary_at_csharp
             //return textFileData;
         }
 
-        // UPDATE
-        public string UpdatePerson(Person person, Person updated)
+        public static Boolean CloseTextFile() 
         {
-            return new Func<String>(() =>
+            if (File.Exists(GetFileName()))
             {
-                if (Repository.CheckContactExistence(person))
+                var pattern = String.Empty;
+                foreach (var person in Repository.peopleFromTextFile) 
                 {
-                    peopleFromTextFile.Remove(person);
-                    peopleFromTextFile.Add(updated);
-                    return $"Contact updated successfully.\nOld data:\n {person.FirstName} " +
-                           $"{person.Surname} | Birthday: {person.Birthday.ToShortDateString()}" +
-                           $"\nNew data:\n {updated.FirstName} {updated.Surname} " +
-                           $"| Birthday: {updated.Birthday.ToShortDateString()}";
+                    pattern += $"{person.Id},{person.FirstName},{person.Surname},{person.Birthday.ToShortDateString()};";
                 }
-                else
-                {
-                    return "Person doesn't exists.";
-                }
-            })();
+                File.WriteAllText(GetFileName(), String.Empty);
+                File.WriteAllText(GetFileName(), pattern);
+            }
+
+
+            return true;
         }
 
-        // DELETE
+        //// UPDATE
+        //public string UpdatePerson(Person person, Person updated)
+        //{
+        //    return new Func<String>(() =>
+        //    {
+        //        if (Repository.CheckContactExistence(person))
+        //        {
+        //            Repository.peopleFromTextFile.Remove(person);
+        //            Repository.peopleFromTextFile.Add(updated);
+        //            return $"Contact updated successfully.\nOld data:\n {person.FirstName} " +
+        //                   $"{person.Surname} | Birthday: {person.Birthday.ToShortDateString()}" +
+        //                   $"\nNew data:\n {updated.FirstName} {updated.Surname} " +
+        //                   $"| Birthday: {updated.Birthday.ToShortDateString()}";
+        //        }
+        //        else
+        //        {
+        //            return "Person doesn't exists.";
+        //        }
+        //    })();
+        //}
+
+        //// DELETE
     }
 }

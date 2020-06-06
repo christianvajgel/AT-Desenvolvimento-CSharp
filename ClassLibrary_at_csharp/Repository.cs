@@ -7,6 +7,7 @@ namespace ClassLibrary_at_csharp
     public class Repository : IRepository
     {
         public static List<Person> people = new List<Person>();
+        public static List<Person> peopleFromTextFile = new List<Person>();
 
         // CREATE
         public string AddPerson(Person person)
@@ -15,15 +16,15 @@ namespace ClassLibrary_at_csharp
             {
                 if (CheckContactExistence(person)) { return "Person already exists."; }
                 else { 
-                    //people.Add(person); return "Person added."; }
-                    people.Add(person); return TextFile.AppendTextToFile(person); }
+                    peopleFromTextFile.Add(person); return "Person added."; }
+                    //peopleFromTextFile.Add(person); return TextFile.AppendTextToFile(person); }
             })();
         }
 
         // READ
         public IEnumerable<Person> ReadPeople()
         {
-            throw new NotImplementedException();
+            return peopleFromTextFile;
         }
 
         // UPDATE - create menu - show list 
@@ -34,11 +35,11 @@ namespace ClassLibrary_at_csharp
                 var result = SearchPerson(id);
                 if (CheckContactExistence(result))
                 {
-                    TextFile.peopleFromTextFile[result.Id] = person;
-                    return $"Contact updated successfully.\nOld data:\n {result.FirstName} " +
+                    peopleFromTextFile[result.Id] = person;
+                    return $"\nContact updated successfully.\nOld data:\n {result.FirstName} " +
                            $"{result.Surname} | Birthday: {result.Birthday.ToShortDateString()}" +
                            $"\nNew data:\n {person.FirstName} {person.Surname} " +
-                           $"| Birthday: {person.Birthday.ToShortDateString()}";
+                           $"\nBirthday: {person.Birthday.ToShortDateString()}";
                 }
                 else
                 {
@@ -48,15 +49,16 @@ namespace ClassLibrary_at_csharp
         }
 
         // DELETE - create menu - change everyone ID after delete process
-        public string DeletePerson(Person person)
+        public string DeletePerson(int id)
         {
             return new Func<String>(() =>
             {
-                var result = SearchPerson(person.Id);
-                if (result != null && result == person)
+                var result = SearchPerson(id);
+                if (result != null && result.Id == id)
                 {
-                    TextFile.peopleFromTextFile.Remove(person);
-                    return $"{person.FirstName} {person.Surname} successfully deleted.";
+                    peopleFromTextFile.Remove(result);
+                    ReorganizeListObjectsIndex(id);
+                    return $"{result.FirstName} {result.Surname} successfully deleted.";
                 }
                 else
                 {
@@ -65,22 +67,68 @@ namespace ClassLibrary_at_csharp
             })();
         }
 
+        public static void ReorganizeListObjectsIndex(int id) 
+        {
+            //Console.WriteLine("\n* * * * * * * Original List * * * * * * *\n");
+
+            //foreach (var p in TextFile.peopleFromTextFile)
+            //{
+            //    Console.WriteLine($"{p.Id} {p.FirstName} {p.Surname} {p.Birthday}\n");
+            //}
+
+            //Console.WriteLine("\n* * * * * * Modification * * * * * * * *\n");
+
+            for (var i = peopleFromTextFile.Count - 1; i >= id; i--) 
+            {
+                peopleFromTextFile[i].Id = peopleFromTextFile[i].Id - 1;
+            }
+
+            //Console.WriteLine("\n* * * * * * * New list * * * * * * *\n");
+
+            //foreach(var p in TextFile.peopleFromTextFile) 
+            //{
+            //    Console.WriteLine($"{p.Id} {p.FirstName} {p.Surname} {p.Birthday}\n");
+            //}
+
+            //Console.WriteLine("\n* * * * * * * * * * * * * * *\n");
+
+            //Console.ReadKey();
+        }
+
         // Search for keywords
         public IEnumerable<Person> SearchPeople(string termFirstName, string termSurname)
         {
-            return TextFile.peopleFromTextFile.Where(person =>
-                person.FirstName.Contains(termFirstName, StringComparison.InvariantCultureIgnoreCase) ||
-                person.Surname.Contains(termSurname, StringComparison.InvariantCultureIgnoreCase));
+            return peopleFromTextFile.Where(person =>
+                                            person.FirstName.Contains(termFirstName, StringComparison.InvariantCultureIgnoreCase) ||
+                                            person.Surname.Contains(termSurname, StringComparison.InvariantCultureIgnoreCase));
         }
 
         // Return people who is celebrating birthday today
-        public IEnumerable<Person> BirthdayPeopleOfTheDay()
+        public string BirthdayPeopleOfTheDay()
         {
-            // iterate over txt to compare each object.Birthday with today's date
-            
-            throw new NotImplementedException();
+            var resultString = $"\nBirthday people of {DateTime.Today.ToLongDateString()}:\n";
+            IEnumerable<Person> result = (
+                from person in peopleFromTextFile
+                where person.Birthday.Day == DateTime.Today.Day && person.Birthday.Month == DateTime.Today.Month
+                select person
+                );
+            foreach (var person in result) 
+            {
+                var plural = (DateTime.Today.Year - person.Birthday.Year != 1) ? "years" : "year";
+                resultString += $"\n - {person.FirstName} {person.Surname} :: {DateTime.Today.Year - person.Birthday.Year} {plural} old\n";
+            }
+            return !result.Any() ? "There is no person celebrating birthday today" : resultString;
         }
 
+        //public static int GetPeopleAge(DateTime date) 
+        //{
+        //    return new Func<int>(() => {
+
+        //        return date.Year - DateTime.Today.Year;
+        //       })();
+
+            
+        //}
 
         public int DateCountdown(string id)
         {
@@ -90,9 +138,9 @@ namespace ClassLibrary_at_csharp
         public static Person SearchPerson(int id)
         {
             //var PersonObject = new Person();
-            foreach (var match in TextFile.peopleFromTextFile)
+            foreach (var match in peopleFromTextFile)
             {
-                if (match.Id == id) { return TextFile.peopleFromTextFile[match.Id]; }
+                if (match.Id == id) { return peopleFromTextFile[match.Id]; }
             }
             return null;
 
@@ -121,7 +169,7 @@ namespace ClassLibrary_at_csharp
         {
             return new Func<Boolean>(() =>
             {
-                foreach (var match in TextFile.peopleFromTextFile)
+                foreach (var match in peopleFromTextFile)
                 {
                     if (match.FirstName.Equals(person.FirstName)
                         && match.Surname.Equals(person.Surname)
@@ -134,7 +182,6 @@ namespace ClassLibrary_at_csharp
                 return false;
             })();
         }
-
 
         //public static List<Person> people = new List<Person>();
 

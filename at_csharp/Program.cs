@@ -8,6 +8,8 @@ using static ClassLibrary_at_csharp.Person;
 using static ClassLibrary_at_csharp.Parsing;
 using static ClassLibrary_at_csharp.Repository;
 using static ClassLibrary_at_csharp.Validations;
+using Menu;
+using static Menu.Edit;
 
 namespace at_csharp
 {
@@ -45,10 +47,13 @@ namespace at_csharp
 
             while (true)
             {
+                Console.WriteLine(repository.BirthdayPeopleOfTheDay());
                 ShowMenu();
                 var operation = ReadNumber("menu", resultList);
                 if (operation.Equals("5"))
                 {
+                    Console.WriteLine(TextFile.CloseTextFile());
+                    Console.ReadKey();
                     break;
                 }
                 else
@@ -71,7 +76,7 @@ namespace at_csharp
                                                           $"for the contexts {UNDERLINE}{firstName.ToUpper()}{RESET} " +
                                                           $"and {UNDERLINE}{surname.ToUpper()}{RESET}:\n");
                                     PrintResultList(resultList);
-                                    Console.WriteLine($"Choose de ID of the desired " +
+                                    Console.WriteLine($"Choose the ID of the desired " +
                                                       $"person to check the countdown.\n");
                                     var numberID = ReadNumber("id", resultList);
                                     var countdown = repository.DateCountdown(numberID);
@@ -135,9 +140,59 @@ namespace at_csharp
                             break;
                         case "3":
                             // edit
+                            while (true)
+                            {
+                                //EditMenu(repository);
+
+                                ClearScreen(false);
+                                Console.WriteLine(ShowMenuEditPeople(repository));
+                                //Console.Write($"Enter with the ID of the desired person to edit: ");
+
+                                var numberID = StringToInt(ReadNumber("id_edit", resultList))[0];
+
+                                var firstName = ReadString("new_firstName");
+                                var surname = ReadString("new_surname");
+
+                                var birthday = new Func<DateTime>(() =>
+                                {
+                                    var completeDate = "";
+                                    var finalDate = new DateTime();
+                                    do
+                                    {
+                                        var day = ReadNumber("day", resultList);
+                                        var month = ReadNumber("month", resultList);
+                                        var year = ReadNumber("year", resultList);
+                                        completeDate = year + "/" + month + "/" + day;
+                                        if (DateValidation(completeDate) == default)
+                                        {
+                                            Console.WriteLine("Invalid date.\nTry again.");
+                                            ClearScreen(false);
+                                        }
+                                        else
+                                        {
+                                            finalDate = ConvertToDateTimeObject(day, month, year)[0];
+                                        }
+                                    } while (DateValidation(completeDate) == default);
+                                    return finalDate;
+                                })();
+                                Console.WriteLine(repository.UpdatePerson(new Person(numberID, firstName, surname, birthday), numberID));
+                                ClearScreen(true);
+                                break;
+                            };
                             break;
                         case "4":
-                            // delete
+                            while (true) 
+                            {
+                                ClearScreen(false);
+                                Console.WriteLine(ShowMenuDeletePeople(repository));
+                                //Console.Write($"Enter with the ID of the desired person to edit: ");
+
+                                var numberID = StringToInt(ReadNumber("id_delete", resultList))[0];
+
+                                Console.WriteLine(repository.DeletePerson(numberID));
+                                ClearScreen(true);
+                                break;
+                            }
                             break;
                     }
                 }
@@ -166,6 +221,32 @@ namespace at_csharp
             Console.WriteLine("\nSearch for a person:\n\n");
         }
 
+        public static string ShowMenuEditPeople(Repository repository)
+        {
+            return repository.ReadPeople() == null ? "\nEdit a person:\n\nThere is no person to edit." :
+                                                     $"\nEdit a person:\n\n{GenerateList(repository)}";
+        }
+
+        public static string ShowMenuDeletePeople(Repository repository)
+        {
+            return repository.ReadPeople() == null ? "\nDelete a person:\n\nThere is no person to delete." :
+                                                    $"\nEdit a person:\n\n{GenerateList(repository)}";
+        }
+
+        public static string GenerateList(Repository repository)
+        {
+            var list = String.Empty;
+            foreach (var person in repository.ReadPeople())
+            {
+                list += $"\nID: {person.Id}\n" +
+                        $"Name: {person.FirstName}\n" +
+                        $"Surname: {person.Surname}\n" +
+                        $"Birthday: {person.Birthday.ToShortDateString()}\n" +
+                        $"\n- - - - - - - - - - - - - - - - - - - - - -\n";
+            }
+            return list;
+        }
+
         public static string ReadNumber(string option, IEnumerable<Person> resultList)
         {
             return new Func<string>(() =>
@@ -176,7 +257,9 @@ namespace at_csharp
                     "day" => InputLoopNumber("1", "31", "day", resultList),
                     "month" => InputLoopNumber("1", "12", "month", resultList),
                     "year" => InputLoopNumber("1", "9999", "year", resultList),
-                    "id" => InputLoopNumber("0", (TextFile.peopleFromTextFile.Count() - 1).ToString(), "ID number", resultList),
+                    "id" => InputLoopNumber("0", (Repository.peopleFromTextFile.Count() - 1).ToString(), "ID number", resultList),
+                    "id_edit" => InputLoopNumber("0", (Repository.peopleFromTextFile.Count() - 1).ToString(), "ID number of the desired person to edit", resultList),
+                    "id_delete" => InputLoopNumber("0", (Repository.peopleFromTextFile.Count() - 1).ToString(), "ID number of the desired person to delete", resultList),
                     _ => null,
                 };
             })();
@@ -190,6 +273,8 @@ namespace at_csharp
                 {
                     "firstName" => InputLoopString("first name"),
                     "surname" => InputLoopString("surname"),
+                    "new_firstName" => InputLoopString("new first name"),
+                    "new_surname" => InputLoopString("new surname"),
                     _ => null,
                 };
             })();
@@ -203,7 +288,7 @@ namespace at_csharp
             while (true)
             {
                 if (type.Equals("ID number") && ok == true) { PrintResultList(resultList); }
-                Console.WriteLine("Enter with the " + type + ": ");
+                Console.Write("Enter with the " + type + ": ");
                 var inputNumber = Console.ReadLine().Trim();
                 if (!String.IsNullOrEmpty(inputNumber))
                 {

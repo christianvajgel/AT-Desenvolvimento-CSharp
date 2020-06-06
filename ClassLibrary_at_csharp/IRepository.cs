@@ -9,9 +9,9 @@ namespace ClassLibrary_at_csharp
         string AddPerson(Person person); // CREATE
         IEnumerable<Person> ReadPeople(); // READ
         string UpdatePerson(Person person, int id); // UPDATE
-        string DeletePerson(Person person); // DELETE
+        string DeletePerson(int id); // DELETE
 
         IEnumerable<Person> SearchPeople(string termFirstName, string termSurname); // Search for keywords
-        IEnumerable<Person> BirthdayPeopleOfTheDay(); // Return people who is celebrating birthday today
+        string BirthdayPeopleOfTheDay(); // Return people who is celebrating birthday today
     }
 }
