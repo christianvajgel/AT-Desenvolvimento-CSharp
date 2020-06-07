@@ -326,7 +326,7 @@ namespace at_csharp
         {
             while (true)
             {
-                Console.WriteLine("Enter with the " + custom + ": ");
+                Console.Write("Enter with the " + custom + ": ");
                 var inputString = Console.ReadLine().Trim();
                 if (!String.IsNullOrEmpty(inputString))
                 {

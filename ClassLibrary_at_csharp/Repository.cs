@@ -117,7 +117,7 @@ namespace ClassLibrary_at_csharp
                 var plural = (DateTime.Today.Year - person.Birthday.Year != 1) ? "years" : "year";
                 resultString += $"\n - {person.FirstName} {person.Surname} :: {DateTime.Today.Year - person.Birthday.Year} {plural} old\n";
             }
-            return !result.Any() ? "There is no person celebrating birthday today" : resultString;
+            return !result.Any() ? $"\n{resultString}\n - There is no person celebrating birthday today." : resultString;
         }
 
         //public static int GetPeopleAge(DateTime date) 
