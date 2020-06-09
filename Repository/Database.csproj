@@ -5,10 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Birthday\Birthday.csproj" />
-    <ProjectReference Include="..\Input\Input.csproj" />
     <ProjectReference Include="..\Person\People.csproj" />
-    <ProjectReference Include="..\Repository\Database.csproj" />
     <ProjectReference Include="..\SystemWideOperations\SystemWideOperations.csproj" />
   </ItemGroup>
 

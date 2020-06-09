@@ -1,38 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using Database;
-using static Database.Repository;
-using People;
-using SystemWideOperations;
 using static SystemWideOperations.Clear;
-using static SystemWideOperations.Print;
-using static SystemWideOperations.Parsing;
-using static Input.Dates;
 using static Input.Strings;
 using static Input.Numbers;
+using People;
+using static SystemWideOperations.Parsing;
+using static SystemWideOperations.Validations;
+using static Input.Dates;
+using Database;
+using System.Collections.Generic;
 
 namespace Menu
 {
-    public class Edit
+    public class Add
     {
-        public static void EditMenu(Repository repository, List<Person> resultList, int id)
+        public static Boolean ok_Add;
+        public static void AddMenu(Repository repository, List<Person> resultList, int id)
         {
             while (true)
             {
-                //EditMenu(repository);
-
+                ok_Add = false;
+                Console.WriteLine($"OK (false) : {ok_Add}");
+                Console.ReadKey();
                 ClearScreen(false);
-                Console.WriteLine(ShowMenuEditPeople(repository));
-                //Console.Write($"Enter with the ID of the desired person to edit: ");
+                ShowMenuAddPeople();
 
-                var numberID = StringToInt(ReadNumber("id_edit", resultList))[0];
-
-                var firstName = ReadString("new_firstName");
-                var surname = ReadString("new_surname");
+                var firstName = ReadString("firstName");
+                var surname = ReadString("surname");
                 var birthday = GetDate(resultList);
-
                 //var birthday = new Func<DateTime>(() =>
                 //{
                 //    var completeDate = "";
@@ -55,16 +49,20 @@ namespace Menu
                 //    } while (DateValidation(completeDate) == default);
                 //    return finalDate;
                 //})();
-                Console.WriteLine(repository.UpdatePerson(new Person(numberID, firstName, surname, birthday), numberID));
-                ClearScreen(true);
+                //var person = new Person(Guid.NewGuid(), firstName, surname, birthday);
+                var person = new Person(id, firstName, surname, birthday);
+                var message = repository.AddPerson(person);
+
+                if (message.Equals("Person added.")) { ok_Add = true; Console.WriteLine($"OK (true) : {ok_Add}"); Console.ReadKey(); }
+                Console.WriteLine(message);
+                ClearScreen(false);
                 break;
             };
         }
 
-        public static string ShowMenuEditPeople(Repository repository)
+        public static void ShowMenuAddPeople()
         {
-            return repository.ReadPeople() == null ? "\nEdit a person:\n\nThere is no person to edit." :
-                                                     $"\nEdit a person:\n\n{GenerateList(repository)}";
+            Console.WriteLine("\nAdd a new person:\n\n");
         }
     }
 }

@@ -6,8 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary_at_csharp\ClassLibrary_at_csharp.csproj" />
+    <ProjectReference Include="..\Birthday\Birthday.csproj" />
+    <ProjectReference Include="..\Input\Input.csproj" />
     <ProjectReference Include="..\Menu\Menu.csproj" />
+    <ProjectReference Include="..\Person\People.csproj" />
+    <ProjectReference Include="..\Repository\Database.csproj" />
+    <ProjectReference Include="..\SystemWideOperations\SystemWideOperations.csproj" />
   </ItemGroup>
 
 </Project>

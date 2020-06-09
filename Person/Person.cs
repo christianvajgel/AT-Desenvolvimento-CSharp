@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ClassLibrary_at_csharp
+namespace People
 {
     public class Person
     {

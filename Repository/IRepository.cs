@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using People;
 
-namespace ClassLibrary_at_csharp
+namespace Database
 {
     public interface IRepository
     {
