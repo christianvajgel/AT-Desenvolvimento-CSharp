@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+﻿using People;
+using System;
 using Database;
-using static Database.Repository;
-using People;
-using SystemWideOperations;
-using static SystemWideOperations.Clear;
-using static SystemWideOperations.Print;
-using static SystemWideOperations.Parsing;
 using static Input.Dates;
 using static Input.Strings;
 using static Input.Numbers;
+using System.Collections.Generic;
+using static Database.Repository;
+using static SystemWideOperations.Clear;
+using static SystemWideOperations.Parsing;
+using System.Linq;
 
 namespace Menu
 {
@@ -22,13 +19,17 @@ namespace Menu
             while (true)
             {
                 //EditMenu(repository);
-
                 ClearScreen(false);
+                var returnedList = ShowMenuEditPeople(repository);
+                if (returnedList.Contains("There is no person to edit.")) 
+                {
+                    Console.WriteLine(returnedList);
+                    ClearScreen(true);
+                    break;
+                }
                 Console.WriteLine(ShowMenuEditPeople(repository));
                 //Console.Write($"Enter with the ID of the desired person to edit: ");
-
                 var numberID = StringToInt(ReadNumber("id_edit", resultList))[0];
-
                 var firstName = ReadString("new_firstName");
                 var surname = ReadString("new_surname");
                 var birthday = GetDate(resultList);
@@ -55,7 +56,7 @@ namespace Menu
                 //    } while (DateValidation(completeDate) == default);
                 //    return finalDate;
                 //})();
-                Console.WriteLine(repository.UpdatePerson(new Person(numberID, firstName, surname, birthday), numberID));
+                Console.WriteLine(repository.UpdatePerson(new Person(numberID, firstName, surname, birthday), numberID, peopleFromTextFile));
                 ClearScreen(true);
                 break;
             };
@@ -63,8 +64,8 @@ namespace Menu
 
         public static string ShowMenuEditPeople(Repository repository)
         {
-            return repository.ReadPeople() == null ? "\nEdit a person:\n\nThere is no person to edit." :
-                                                     $"\nEdit a person:\n\n{GenerateList(repository)}";
+            return repository.ReadPeople(peopleFromTextFile).ToList().Count == 0 ? "\nEdit a person:\n\nThere is no person to edit." :
+                                                     $"\nEdit a person:\n\n{GenerateList(repository, peopleFromTextFile)}";
         }
     }
 }

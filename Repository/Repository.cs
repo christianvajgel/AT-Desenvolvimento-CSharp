@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Linq;
-using System.Collections.Generic;
 using People;
 using SystemWideOperations;
+using System.Collections.Generic;
+using static SystemWideOperations.Clear;
 
 namespace Database
 {
@@ -12,11 +12,11 @@ namespace Database
         public static List<Person> peopleFromTextFile = new List<Person>();
 
         // CREATE -> xUnit [Fact] Create_AddPersonToList()
-        public string AddPerson(Person person)
+        public string AddPerson(Person person, List<Person> peopleFromTextFile)
         {
             return new Func<String>(() =>
             {
-                if (CheckContactExistence(person)) { return "Person already exists."; }
+                if (CheckContactExistence(person, peopleFromTextFile)) { return "Person already exists."; }
                 else
                 {
                     peopleFromTextFile.Add(person); return "Person added.";
@@ -25,25 +25,28 @@ namespace Database
             })();
         }
 
+
         // READ -> xUnit [Fact] Read_ReadPeople() 
-        public IEnumerable<Person> ReadPeople()
+        public IEnumerable<Person> ReadPeople(List<Person> peopleFromTextFile)
         {
             return peopleFromTextFile;
         }
 
         // UPDATE -> xUnit [Fact] Update_UpdatePerson() 
-        public string UpdatePerson(Person person, int id)
+        public string UpdatePerson(Person person, int id, List<Person> peopleFromTextFile)
         {
             return new Func<String>(() =>
             {
-                var result = SearchPerson(id);
-                if (CheckContactExistence(result))
+                var result = SearchPerson(id, peopleFromTextFile);
+                if (CheckContactExistence(result, peopleFromTextFile))
                 {
                     peopleFromTextFile[result.Id] = person;
-                    return $"\nContact updated successfully.\nOld data:\n {result.FirstName} " +
+                    //ClearScreen(false);
+                    try { ClearScreen(false); } catch (Exception){ }
+                    //Console.Clear();
+                    return $"\nContact updated successfully.\n\nOld data: {result.FirstName} " +
                            $"{result.Surname} | Birthday: {result.Birthday.ToShortDateString()}" +
-                           $"\nNew data:\n {person.FirstName} {person.Surname} " +
-                           $"\nBirthday: {person.Birthday.ToShortDateString()}";
+                           $"\nNew data: {person.FirstName} {person.Surname} | Birthday: {person.Birthday.ToShortDateString()}";
                 }
                 else
                 {
@@ -53,11 +56,11 @@ namespace Database
         }
 
         // DELETE -> xUnit [Fact] Delete_DeletePerson() 
-        public string DeletePerson(int id)
+        public string DeletePerson(int id, List<Person> peopleFromTextFile)
         {
             return new Func<String>(() =>
             {
-                var result = SearchPerson(id);
+                var result = SearchPerson(id, peopleFromTextFile);
                 if (result != null && result.Id == id)
                 {
                     peopleFromTextFile.Remove(result);
@@ -73,41 +76,13 @@ namespace Database
 
         public static void ReorganizeListObjectsIndex(int id)
         {
-            //Console.WriteLine("\n* * * * * * * Original List * * * * * * *\n");
-
-            //foreach (var p in TextFile.peopleFromTextFile)
-            //{
-            //    Console.WriteLine($"{p.Id} {p.FirstName} {p.Surname} {p.Birthday}\n");
-            //}
-
-            //Console.WriteLine("\n* * * * * * Modification * * * * * * * *\n");
-
             for (var i = peopleFromTextFile.Count - 1; i >= id; i--)
             {
                 peopleFromTextFile[i].Id = peopleFromTextFile[i].Id - 1;
             }
-
-            //Console.WriteLine("\n* * * * * * * New list * * * * * * *\n");
-
-            //foreach(var p in TextFile.peopleFromTextFile) 
-            //{
-            //    Console.WriteLine($"{p.Id} {p.FirstName} {p.Surname} {p.Birthday}\n");
-            //}
-
-            //Console.WriteLine("\n* * * * * * * * * * * * * * *\n");
-
-            //Console.ReadKey();
         }
 
-        // Search for keywords
-        //public IEnumerable<Person> SearchPeople(string termFirstName, string termSurname)
-        //{
-        //    return peopleFromTextFile.Where(person =>
-        //                                    person.FirstName.Contains(termFirstName, StringComparison.InvariantCultureIgnoreCase) ||
-        //                                    person.Surname.Contains(termSurname, StringComparison.InvariantCultureIgnoreCase));
-        //}
-
-        public List<Person> SearchPeople(string termFirstName, string termSurname)
+        public List<Person> SearchPeople(string termFirstName, string termSurname, List<Person> peopleFromTextFile)
         {
             var result = new List<Person>();
             foreach (var match in peopleFromTextFile)
@@ -122,28 +97,28 @@ namespace Database
         }
 
         // Return people who is celebrating birthday today
-        public string BirthdayPeopleOfTheDay()
-        {
-            var resultString = $"\nBirthday people of {DateTime.Today.ToLongDateString()}:\n";
-            IEnumerable<Person> result = (
-                from person in peopleFromTextFile
-                where person.Birthday.Day == DateTime.Today.Day && person.Birthday.Month == DateTime.Today.Month
-                select person
-                );
-            foreach (var person in result)
-            {
-                var plural = (DateTime.Today.Year - person.Birthday.Year != 1) ? "years" : "year";
-                resultString += $"\n - {person.FirstName} {person.Surname} :: {DateTime.Today.Year - person.Birthday.Year} {plural} old\n";
-            }
-            return !result.Any() ? $"\n{resultString}\n - There is no person celebrating birthday today." : resultString;
-        }
+        //public string BirthdayPeopleOfTheDay()
+        //{
+        //    var resultString = $"\nBirthday people of {DateTime.Today.ToLongDateString()}:\n";
+        //    IEnumerable<Person> result = (
+        //        from person in peopleFromTextFile
+        //        where person.Birthday.Day == DateTime.Today.Day && person.Birthday.Month == DateTime.Today.Month
+        //        select person
+        //        );
+        //    foreach (var person in result)
+        //    {
+        //        var plural = (DateTime.Today.Year - person.Birthday.Year != 1) ? "years" : "year";
+        //        resultString += $"\n - {person.FirstName} {person.Surname} :: {DateTime.Today.Year - person.Birthday.Year} {plural} old\n";
+        //    }
+        //    return !result.Any() ? $"\n{resultString}\n - There is no person celebrating birthday today." : resultString;
+        //}
 
         //public int DateCountdown(string id)
         //{
         //    return new Func<int>(() => { return CalculateDays(SearchPerson(Parsing.StringToInt(id)[0])); })();
         //}
 
-        public static Person SearchPerson(int id)
+        public static Person SearchPerson(int id, List<Person> peopleFromTextFile)
         {
             //var PersonObject = new Person();
             foreach (var match in peopleFromTextFile)
@@ -169,13 +144,13 @@ namespace Database
 
         public string PersonFullName(string id)
         {
-            var person = SearchPerson(Parsing.StringToInt(id)[0]);
+            var person = SearchPerson(Parsing.StringToInt(id)[0],peopleFromTextFile);
             return $"{person.FirstName} {person.Surname}";
         }
 
-        public static Boolean CheckContactExistence(Person person)
+        public static bool CheckContactExistence(Person person, List<Person> peopleFromTextFile)
         {
-            return new Func<Boolean>(() =>
+            return new Func<bool>(() =>
             {
                 foreach (var match in peopleFromTextFile)
                 {
@@ -191,10 +166,10 @@ namespace Database
             })();
         }
 
-        public static string GenerateList(Repository repository)
+        public static string GenerateList(Repository repository, List<Person> peopleFromTextFile)
         {
             var list = String.Empty;
-            foreach (var person in repository.ReadPeople())
+            foreach (var person in repository.ReadPeople(peopleFromTextFile))
             {
                 list += $"\nID: {person.Id}\n" +
                         $"Name: {person.FirstName}\n" +

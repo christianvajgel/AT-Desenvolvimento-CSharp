@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
 using Xunit;
 using People;
-using static SupportFunctions.RandomData;
 using Database;
-using SupportFunctions;
+using System.Collections.Generic;
+using static SupportFunctions.RandomData;
+using System;
 
 namespace xUnit_Repository
 {
@@ -16,42 +15,45 @@ namespace xUnit_Repository
 
     public class UnitTest_Repository
     {
-        public static List<Person> peopleFromTextFile = new List<Person>();
+        public static List<Person> xUnit_peopleFromTextFile = new List<Person>();
         Repository repository = new Repository();
 
         [Fact]
         public void Create_AddPersonToList()
         {
-            for (var p = 0; p < 21; p++) 
+            for (var p = 0; p < 5; p++)
             {
-                Assert.Equal("Person added.",repository.AddPerson(new Person(
-                                                                  p, 
-                                                                  $"{RandomData.names[RandomInt(0,4)]}", 
-                                                                  $"{RandomData.surnames[RandomInt(0, 4)]}", 
-                                                                  RandomDate())));
+                Assert.Equal("Person added.", repository.AddPerson(new Person(
+                                                                              p,
+                                                                              $"{names[RandomInt(0,4)]}",
+                                                                              $"{surnames[RandomInt(0,4)]}",
+                                                                              RandomDate()), 
+                                                                              xUnit_peopleFromTextFile));
             }
         }
 
         [Fact]
-        public void Read_ReadPeople() 
+        public void Read_ReadPeople()
         {
-            Assert.NotNull(repository.ReadPeople()); 
+            Assert.NotNull(repository.ReadPeople(xUnit_peopleFromTextFile));
         }
 
         [Fact]
-        public void Update_UpdatePerson() 
+        public void Update_UpdatePerson()
         {
+            var testList = new List<Person>();
+            for (var i = 0; i < 5; i++) { testList.Add(new Person(i, "Name", "Surname", new DateTime(2020, 6, 12))); }
             //Create_AddPersonToList();
-            var id = RandomInt(0, 20);
-            var p = new Person(id,$"{RandomData.names[RandomInt(0, 4)]}",
-                            $"{RandomData.surnames[RandomInt(0, 4)]}",RandomDate());
-            Assert.Contains("Contact",repository.UpdatePerson(p, id));
+            var id = RandomInt(0, 4);
+            var p = new Person(id, $"NewFirstName",
+                                   $"NewSurname", RandomDate());
+            Assert.Contains("Contact", repository.UpdatePerson(p, id, testList));
         }
 
         [Fact]
-        public void Delete_DeletePerson() 
+        public void Delete_DeletePerson()
         {
-            Assert.Contains("deleted",repository.DeletePerson(RandomInt(0, 20)));
+            Assert.Contains("deleted", repository.DeletePerson(RandomInt(0, 4), xUnit_peopleFromTextFile));
         }
     }
 }

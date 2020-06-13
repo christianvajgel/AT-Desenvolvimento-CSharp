@@ -1,13 +1,15 @@
-﻿using System;
+﻿using People;
+using System;
+using Database;
+using static Menu.Add;
+using static Menu.Main;
+using static Menu.Edit;
+using static Menu.Search;
+using static Menu.Delete;
+using static Input.Numbers;
+using static Birthday.Today;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using static Menu.Search;
-using static Menu.Add;
-using static Menu.Edit;
-using static Menu.Delete;
-using People;
-using Database;
-using static Input.Numbers;
 
 namespace at_csharp
 {
@@ -40,20 +42,18 @@ namespace at_csharp
             mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
             SetConsoleMode(handle, mode);
 
-            // *******************************************************************************
-
             TextFile.ReadTextFile();
             //var id = TextFile.CheckCurrentId();
 
             while (true)
             {
-                Console.WriteLine(repository.BirthdayPeopleOfTheDay());
-                ShowMenu();
+                Console.WriteLine(BirthdayPeopleOfTheDay());
+                //ShowMenu();
+                MainMenu();
                 var operation = ReadNumber("menu", resultList);
                 if (operation.Equals("5"))
                 {
-                    Console.WriteLine(TextFile.CloseTextFile());
-                    Console.ReadKey();
+                    TextFile.CloseTextFile();
                     break;
                 }
                 else
@@ -101,8 +101,8 @@ namespace at_csharp
                             //}
                             break;
                         case "2":
-                            AddMenu(repository,resultList,id);
-                            if (ok_Add == true) { id++; Console.WriteLine($"ID Program: {id}"); Console.ReadKey(); }
+                            AddMenu(repository, resultList, id);
+                            if (ok_Add == true) { id++; }
                             //while (true)
                             //{
                             //    ClearScreen(false);
@@ -144,7 +144,7 @@ namespace at_csharp
                             //};
                             break;
                         case "3":
-                            EditMenu(repository,resultList,id);
+                            EditMenu(repository, resultList, id);
 
                             //while (true)
                             //{
@@ -187,8 +187,8 @@ namespace at_csharp
                             //};
                             break;
                         case "4":
-                            DeleteMenu(repository,resultList);
-                            if (ok_Delete == true) { id--; Console.WriteLine($"ID Program: {id}"); Console.ReadKey(); }
+                            DeleteMenu(repository, resultList);
+                            if (ok_Delete == true) { id--; }
                             //while (true)
                             //{
                             //    ClearScreen(false);
@@ -209,7 +209,6 @@ namespace at_csharp
 
         public static void ShowMenu()
         {
-            Console.WriteLine("\n");
             Console.WriteLine("\n*** C# Birthday Manager ***\n\n  " +
                                         "Select an option:\n    " +
                                         "1- Search people\n    " +

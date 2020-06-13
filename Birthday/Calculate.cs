@@ -9,7 +9,7 @@ namespace Birthday
     {
         public static int DateCountdown(string id)
         {
-            return new Func<int>(() => { return CalculateDays(SearchPerson(StringToInt(id)[0])); })();
+            return new Func<int>(() => { return CalculateDays(SearchPerson(StringToInt(id)[0],peopleFromTextFile)); })();
         }
 
         private static int CalculateDays(Person person)

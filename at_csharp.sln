@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "Repository\Data
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xUnit", "xUnit", "{74DFF860-DD8C-4AED-A5E8-CEC141214503}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xUnit_Repository", "xUnit_Repository\xUnit_Repository.csproj", "{9FEC07A6-0B45-438C-923D-E8700B3042DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xUnit_Project", "xUnit_Repository\xUnit_Project.csproj", "{9FEC07A6-0B45-438C-923D-E8700B3042DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupportFunctions", "SupportFunctions\SupportFunctions.csproj", "{D829E9B0-5511-429A-B337-D1A14150822E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SupportFunctions", "SupportFunctions\SupportFunctions.csproj", "{D829E9B0-5511-429A-B337-D1A14150822E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

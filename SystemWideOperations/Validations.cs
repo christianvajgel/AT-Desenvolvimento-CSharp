@@ -6,6 +6,10 @@ namespace SystemWideOperations
 {
     public static class Validations
     {
+        // xUnit [Fact] StringValidation_Valid(string evaluate) 
+        //              StringValidation_NotValid(string evaluate)
+        //              NumberValidation_Valid(string evaluate) 
+        //              NumberValidation_NotValid(string evaluate)
         public static List<string> StringValidation(string evaluate)
         {
             List<string> validations = new List<string>();
@@ -23,6 +27,8 @@ namespace SystemWideOperations
             return validations;
         }
 
+        // xUnit [Fact] DateValidation_Valid(string evaluate)
+        //              DateValidation_NotValid(string evaluate)
         public static DateTime DateValidation(string evaluate)
         {
             return new Func<DateTime>(() =>

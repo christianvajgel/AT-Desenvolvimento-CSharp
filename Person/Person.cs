@@ -6,6 +6,7 @@ namespace People
     {
         public Person() { }
 
+        // xUnit[Fact] CreateValidPersonObject()
         public Person(int id, string firstName, string surnameName, DateTime birthday)
         {
             Id = id;

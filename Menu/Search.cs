@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SystemWideOperations;
-using static SystemWideOperations.Clear;
-using static SystemWideOperations.Print;
-using Input;
+﻿using People;
+using System;
+using Database;
+using System.Linq;
 using static Input.Strings;
 using static Input.Numbers;
-using System.Linq;
-using People;
-using Database;
 using static Birthday.Calculate;
+using System.Collections.Generic;
+using static Database.Repository;
+using static SystemWideOperations.Clear;
+using static SystemWideOperations.Print;
 
 namespace Menu
 {
@@ -24,8 +22,8 @@ namespace Menu
                 ShowMenuSearchPeople();
                 var firstName = ReadString("firstName");
                 var surname = ReadString("surname");
-                resultList = repository.SearchPeople(firstName,surname);
-                //Loading();
+                resultList = repository.SearchPeople(firstName,surname, peopleFromTextFile);
+                Loading();
                 if (resultList.Any())
                 {
                     ClearScreen(false);
@@ -61,7 +59,5 @@ namespace Menu
         {
             Console.WriteLine("\nSearch for a person:\n\n");
         }
-
-
     }
 }

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SystemWideOperations;
 using static SystemWideOperations.Clear;
-using static SystemWideOperations.Parsing;
 using static SystemWideOperations.Validations;
 
 namespace Input
@@ -29,7 +25,7 @@ namespace Input
         {
             while (true)
             {
-                Console.WriteLine("Enter with the " + custom + ": ");
+                Console.Write("Enter with the " + custom + ": ");
                 var inputString = Console.ReadLine().Trim();
                 if (!String.IsNullOrEmpty(inputString))
                 {

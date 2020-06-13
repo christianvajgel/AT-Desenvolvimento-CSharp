@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using People;
+using System;
+using Database;
 using SystemWideOperations;
+using System.Collections.Generic;
 using static SystemWideOperations.Clear;
 using static SystemWideOperations.Print;
-using static SystemWideOperations.Validations;
-using People;
-using Database;
 
 namespace Input
 {

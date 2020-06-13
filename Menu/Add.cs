@@ -1,29 +1,25 @@
-﻿using System;
-using static SystemWideOperations.Clear;
-using static Input.Strings;
-using static Input.Numbers;
-using People;
-using static SystemWideOperations.Parsing;
-using static SystemWideOperations.Validations;
-using static Input.Dates;
+﻿using People;
+using System;
 using Database;
+using static Input.Dates;
+using static Input.Strings;
 using System.Collections.Generic;
+using static SystemWideOperations.Clear;
 
 namespace Menu
 {
     public class Add
     {
-        public static Boolean ok_Add;
+        public static bool ok_Add;
         public static void AddMenu(Repository repository, List<Person> resultList, int id)
         {
             while (true)
             {
                 ok_Add = false;
-                Console.WriteLine($"OK (false) : {ok_Add}");
-                Console.ReadKey();
+                //Console.WriteLine($"OK (false) : {ok_Add}");
+                //Console.ReadKey();
                 ClearScreen(false);
                 ShowMenuAddPeople();
-
                 var firstName = ReadString("firstName");
                 var surname = ReadString("surname");
                 var birthday = GetDate(resultList);
@@ -51,9 +47,8 @@ namespace Menu
                 //})();
                 //var person = new Person(Guid.NewGuid(), firstName, surname, birthday);
                 var person = new Person(id, firstName, surname, birthday);
-                var message = repository.AddPerson(person);
-
-                if (message.Equals("Person added.")) { ok_Add = true; Console.WriteLine($"OK (true) : {ok_Add}"); Console.ReadKey(); }
+                var message = repository.AddPerson(person,Repository.peopleFromTextFile);
+                if (message.Equals("Person added.")) { ok_Add = true; }
                 Console.WriteLine(message);
                 ClearScreen(false);
                 break;

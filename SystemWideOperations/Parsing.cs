@@ -6,6 +6,8 @@ namespace SystemWideOperations
 {
     public static class Parsing
     {
+        // xUnit [Fact] StringToInt_Valid(string evaluate) 
+        //              StringToInt_NotValid(string evaluate)
         public static List<int> StringToInt(string evaluate)
         {
             if (Validations.StringValidation(evaluate)[1].Equals("valid"))
@@ -28,6 +30,8 @@ namespace SystemWideOperations
             }
         }
 
+        // xUnit [Fact] ConvertToDateTimeObject_Valid(string day, string month, string year)  
+        //              ConvertToDateTimeObject_NotValid(string day, string month, string year)
         public static List<DateTime> ConvertToDateTimeObject(string day, string month, string year)
         {
             var evaluate = year + "/" + month + "/" + day;
