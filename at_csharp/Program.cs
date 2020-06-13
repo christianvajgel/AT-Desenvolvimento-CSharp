@@ -47,7 +47,7 @@ namespace at_csharp
 
             while (true)
             {
-                Console.WriteLine(BirthdayPeopleOfTheDay());
+                Console.WriteLine(BirthdayPeopleOfTheDay(Repository.peopleFromTextFile));
                 //ShowMenu();
                 MainMenu();
                 var operation = ReadNumber("menu", resultList);

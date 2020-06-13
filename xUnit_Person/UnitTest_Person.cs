@@ -2,7 +2,7 @@
 using People;
 using static SupportFunctions.RandomData;
 
-namespace xUnit_Person
+namespace xUnit_Repository
 {
     public class UnitTest_Person
     {

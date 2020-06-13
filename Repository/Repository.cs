@@ -19,7 +19,9 @@ namespace Database
                 if (CheckContactExistence(person, peopleFromTextFile)) { return "Person already exists."; }
                 else
                 {
-                    peopleFromTextFile.Add(person); return "Person added.";
+                    peopleFromTextFile.Add(person); return $"\nPerson added.\n\nDATA:\n\n    " +
+                                                           $"- Name: {person.FirstName} {person.Surname}\n    " +
+                                                           $"- Birthday: {person.Birthday.ToShortDateString()}";
                 }
                 //peopleFromTextFile.Add(person); return TextFile.AppendTextToFile(person); }
             })();
@@ -44,9 +46,11 @@ namespace Database
                     //ClearScreen(false);
                     try { ClearScreen(false); } catch (Exception){ }
                     //Console.Clear();
-                    return $"\nContact updated successfully.\n\nOld data: {result.FirstName} " +
-                           $"{result.Surname} | Birthday: {result.Birthday.ToShortDateString()}" +
-                           $"\nNew data: {person.FirstName} {person.Surname} | Birthday: {person.Birthday.ToShortDateString()}";
+                    return $"\nContact successfully updated." +
+                           $"\n\n\nOld data:" +
+                           $"\n\n  - Name: {result.FirstName} {result.Surname}\n  - Birthday: {result.Birthday.ToShortDateString()}" +
+                           $"\n\n\nNew data:" +
+                           $"\n\n  - Name: {person.FirstName} {person.Surname}\n  - Birthday: {person.Birthday.ToShortDateString()}\n";
                 }
                 else
                 {
@@ -65,7 +69,7 @@ namespace Database
                 {
                     peopleFromTextFile.Remove(result);
                     ReorganizeListObjectsIndex(id);
-                    return $"{result.FirstName} {result.Surname} successfully deleted.";
+                    return $"\n\n{result.FirstName} {result.Surname} successfully deleted.";
                 }
                 else
                 {
@@ -94,6 +98,15 @@ namespace Database
                 }
             }
             return result;
+        }
+
+        public Person SearchPersonById(int id, List<Person> peopleFromTextFile) 
+        {
+            foreach (var p in peopleFromTextFile) 
+            {
+                if (p.Id == id) { return p; }
+            }
+            return null;
         }
 
         // Return people who is celebrating birthday today

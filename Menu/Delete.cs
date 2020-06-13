@@ -18,20 +18,21 @@ namespace Menu
             while (true)
             {
                 ok_Delete = false;
-                ClearScreen(false);
+                try { ClearScreen(false); } catch (Exception) { }
                 var returnedList = ShowMenuDeletePeople(repository);
                 if (returnedList.Contains("There is no person to delete."))
                 {
                     Console.WriteLine(returnedList);
-                    ClearScreen(true);
+                    try { ClearScreen(true); } catch (Exception) { }
                     break;
                 }
                 Console.WriteLine(returnedList);
                 //Console.Write($"Enter with the ID of the desired person to edit: ");
                 var numberID = StringToInt(ReadNumber("id_delete", resultList))[0];
+                try { ClearScreen(false); } catch (Exception) { }
                 var message = repository.DeletePerson(numberID,peopleFromTextFile);
                 Console.WriteLine(message);
-                ClearScreen(true);
+                try { ClearScreen(true); } catch (Exception) { }
                 if (!message.Equals("Person does not exists.")) { ok_Delete = true; }
                 break;
             }

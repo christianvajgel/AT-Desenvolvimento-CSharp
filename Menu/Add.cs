@@ -18,7 +18,7 @@ namespace Menu
                 ok_Add = false;
                 //Console.WriteLine($"OK (false) : {ok_Add}");
                 //Console.ReadKey();
-                ClearScreen(false);
+                try { ClearScreen(false); } catch (Exception) { }
                 ShowMenuAddPeople();
                 var firstName = ReadString("firstName");
                 var surname = ReadString("surname");
@@ -47,10 +47,11 @@ namespace Menu
                 //})();
                 //var person = new Person(Guid.NewGuid(), firstName, surname, birthday);
                 var person = new Person(id, firstName, surname, birthday);
+                try { ClearScreen(false); } catch (Exception) { }
                 var message = repository.AddPerson(person,Repository.peopleFromTextFile);
-                if (message.Equals("Person added.")) { ok_Add = true; }
+                if (message.Contains("Person added.")) { ok_Add = true; }
                 Console.WriteLine(message);
-                ClearScreen(false);
+                try { ClearScreen(true); } catch (Exception) { }
                 break;
             };
         }

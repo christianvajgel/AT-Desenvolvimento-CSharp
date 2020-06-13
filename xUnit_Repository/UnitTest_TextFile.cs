@@ -1,7 +1,7 @@
 ﻿using Xunit;
 using static Database.TextFile;
 
-namespace xUnit_Repository
+namespace xUnit_TextFile
 {
     public class UnitTest_TextFile
     {

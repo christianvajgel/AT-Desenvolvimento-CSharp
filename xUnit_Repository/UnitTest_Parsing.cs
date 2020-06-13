@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using static SystemWideOperations.Parsing;
 
-namespace xUnit_Repository
+namespace xUnit_Parsing
 {
     public class UnitTest_Parsing
     {

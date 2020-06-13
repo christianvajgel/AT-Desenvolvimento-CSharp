@@ -1,9 +1,9 @@
 using Xunit;
+using System;
 using People;
 using Database;
 using System.Collections.Generic;
 using static SupportFunctions.RandomData;
-using System;
 
 namespace xUnit_Repository
 {
@@ -23,7 +23,7 @@ namespace xUnit_Repository
         {
             for (var p = 0; p < 5; p++)
             {
-                Assert.Equal("Person added.", repository.AddPerson(new Person(
+                Assert.Contains("\nPerson added.", repository.AddPerson(new Person(
                                                                               p,
                                                                               $"{names[RandomInt(0,4)]}",
                                                                               $"{surnames[RandomInt(0,4)]}",

@@ -11,6 +11,8 @@ namespace Database
         string DeletePerson(int id, List<Person> peopleFromTextFile); // DELETE
         List<Person> SearchPeople(string termFirstName, string termSurname, List<Person> peopleFromTextFile); // Search for keywords
 
+        Person SearchPersonById(int id, List<Person> peopleFromTextFile);
+
         //string BirthdayPeopleOfTheDay(); // Return people who is celebrating birthday today
     }
 }

@@ -22,7 +22,7 @@ namespace Input
                 if (DateValidation(completeDate) == default)
                 {
                     Console.WriteLine("Invalid date.\nTry again.");
-                    ClearScreen(false);
+                    try { ClearScreen(false); } catch (Exception) { }
                 }
                 else
                 {

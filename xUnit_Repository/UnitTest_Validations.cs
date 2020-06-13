@@ -2,7 +2,7 @@
 using Xunit;
 using static SystemWideOperations.Validations;
 
-namespace xUnit_Repository
+namespace xUnit_Validations
 {
     public class UnitTest_Validations
     {

@@ -19,17 +19,20 @@ namespace Menu
             while (true)
             {
                 //EditMenu(repository);
-                ClearScreen(false);
+                try { ClearScreen(false); } catch (Exception) { }
                 var returnedList = ShowMenuEditPeople(repository);
                 if (returnedList.Contains("There is no person to edit.")) 
                 {
                     Console.WriteLine(returnedList);
-                    ClearScreen(true);
+                    try { ClearScreen(true); } catch (Exception) { }
                     break;
                 }
+                resultList = repository.ReadPeople(peopleFromTextFile).ToList();
                 Console.WriteLine(ShowMenuEditPeople(repository));
                 //Console.Write($"Enter with the ID of the desired person to edit: ");
                 var numberID = StringToInt(ReadNumber("id_edit", resultList))[0];
+                try { ClearScreen(false); } catch (Exception) { }
+                Console.WriteLine(ShowPersonToEdit(numberID,repository,resultList));
                 var firstName = ReadString("new_firstName");
                 var surname = ReadString("new_surname");
                 var birthday = GetDate(resultList);
@@ -57,7 +60,7 @@ namespace Menu
                 //    return finalDate;
                 //})();
                 Console.WriteLine(repository.UpdatePerson(new Person(numberID, firstName, surname, birthday), numberID, peopleFromTextFile));
-                ClearScreen(true);
+                try { ClearScreen(true); } catch (Exception) { }
                 break;
             };
         }
@@ -65,7 +68,17 @@ namespace Menu
         public static string ShowMenuEditPeople(Repository repository)
         {
             return repository.ReadPeople(peopleFromTextFile).ToList().Count == 0 ? "\nEdit a person:\n\nThere is no person to edit." :
-                                                     $"\nEdit a person:\n\n{GenerateList(repository, peopleFromTextFile)}";
+                                                                                  $"\nEdit a person:\n\n{GenerateList(repository, peopleFromTextFile)}";
+        }
+
+        public static string ShowPersonToEdit(int id, Repository repository, List<Person> resultList) 
+        {
+            var person = repository.SearchPersonById(id, resultList);
+            return $"\n\nEdit {person.FirstName}:\n    " +
+                   $"\n    Name: {person.FirstName}" +
+                   $"\n    Surname: {person.Surname}" +
+                   $"\n    Birthday: {person.Birthday.ToShortDateString()}" +
+                   $"\n\n- - - - - - - - - - - - - - - - - - - - - -\n";
         }
     }
 }

@@ -59,7 +59,7 @@ namespace Input
                 {
                     Console.WriteLine("\nError: Empty field.\nTry again.");
                 }
-                ClearScreen(false);
+                try { ClearScreen(false); } catch (Exception) { }
             }
         }
     }

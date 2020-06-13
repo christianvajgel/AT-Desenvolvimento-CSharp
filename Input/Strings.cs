@@ -44,7 +44,7 @@ namespace Input
                     Console.WriteLine("Error: Empty field.\n" +
                                       "Try again.");
                 }
-                ClearScreen(false);
+                try { ClearScreen(false); } catch (Exception) { }
             }
         }
     }
