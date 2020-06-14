@@ -30,7 +30,7 @@ namespace SupportFunctions
                     if (DateValidation(completeDate) == default)
                     {
                         Console.WriteLine("Invalid date.\nTry again.");
-                        try { ClearScreen(false); } catch (Exception) { }
+                        ClearScreen(false);
                     }
                     else
                     {

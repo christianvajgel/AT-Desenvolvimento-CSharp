@@ -14,19 +14,19 @@ namespace Menu
 {
     public class Search
     {
-        public static void SearchMenu(Repository repository, List<Person> resultList, string UNDERLINE, string RESET) 
+        public static void SearchMenu(Repository repository, List<Person> resultList, string UNDERLINE, string RESET)
         {
             while (true)
             {
-                try { ClearScreen(false); } catch (Exception) { }
+                ClearScreen(false);
                 ShowMenuSearchPeople();
                 var firstName = ReadString("firstName");
                 var surname = ReadString("surname");
-                resultList = repository.SearchPeople(firstName,surname, peopleFromTextFile);
+                resultList = repository.SearchPeople(firstName, surname, peopleFromTextFile);
                 Loading();
                 if (resultList.Any())
                 {
-                    try { ClearScreen(false); } catch (Exception) { }
+                    ClearScreen(false);
                     Console.WriteLine($"\n\nSearch Results " +
                                           $"for the contexts {UNDERLINE}{firstName.ToUpper()}{RESET} " +
                                           $"and {UNDERLINE}{surname.ToUpper()}{RESET}:\n");
@@ -34,23 +34,22 @@ namespace Menu
                     Console.WriteLine($"Choose the ID of the desired " +
                                       $"person to check the countdown.\n");
                     var numberID = ReadNumber("id", resultList);
-                    //var countdown = repository.DateCountdown(numberID);
                     var countdown = DateCountdown(numberID, peopleFromTextFile);
                     var verb = "are";
                     var dayWord = "days";
                     if (countdown == 1) { verb = "is"; dayWord = "day"; }
-                    try { ClearScreen(false); } catch (Exception) { }
-                    if (countdown == 0) { Console.WriteLine($"\n\nToday is {repository.PersonFullName(numberID)}'s birthday!"); }
-                    else { Console.WriteLine($"\n\nThere {verb} {countdown} {dayWord} before {repository.PersonFullName(numberID)}'s birthday!"); }
+                    ClearScreen(false);
+                    if (countdown == 0) { Console.WriteLine($"\n\nToday is {repository.PersonFullName(numberID, peopleFromTextFile)}'s birthday!"); }
+                    else { Console.WriteLine($"\n\nThere {verb} {countdown} {dayWord} before {repository.PersonFullName(numberID, peopleFromTextFile)}'s birthday!"); }
                 }
                 else
                 {
-                    try { ClearScreen(false); } catch (Exception) { }
+                    ClearScreen(false);
                     Console.WriteLine($"\nNo results were found with these " +
                                       $"search contexts: '{UNDERLINE}{firstName}{RESET}' " +
                                       $"and '{UNDERLINE}{surname}{RESET}'.\nTry again.");
                 }
-                try { ClearScreen(true); } catch (Exception) { }
+                ClearScreen(true);
                 break;
             }
         }

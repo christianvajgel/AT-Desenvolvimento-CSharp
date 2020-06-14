@@ -11,26 +11,6 @@ namespace xUnit_Birthday
     public class UnitTest_Birthday
     {
         [Fact]
-        public void ReturnResult_BirthdayPeopleOfTheDay_Calculate()
-        {
-            var resultList = new List<Person>
-            {
-                new Person(0, "Name", "Surname", DateTime.Now)
-            };
-            Assert.DoesNotContain("no person celebrating", BirthdayPeopleOfTheDay(resultList));
-        }
-
-        [Fact]
-        public void DontReturnResult_BirthdayPeopleOfTheDay_Calculate()
-        {
-            var noResultList = new List<Person>
-            {
-                new Person(0, "Name", "Surname", new DateTime(1234,12,21))
-            };
-            Assert.Contains("no person celebrating", BirthdayPeopleOfTheDay(noResultList));
-        }
-
-        [Fact]
         public void DateCountdown_BirthdayToday_Calculate()
         {
             var birthdayList = new List<Person>
@@ -102,6 +82,26 @@ namespace xUnit_Birthday
                     new object[] { 9,$"{names[RandomInt(0,4)]}", $"{surnames[RandomInt(0, 4)]}", DateTime.Now.AddDays(100) },
                 };
             }
+        }
+
+        [Fact]
+        public void ReturnResult_BirthdayPeopleOfTheDay_Today()
+        {
+            var resultList = new List<Person>
+            {
+                new Person(0, "Name", "Surname", DateTime.Now)
+            };
+            Assert.DoesNotContain("no person celebrating", BirthdayPeopleOfTheDay(resultList));
+        }
+
+        [Fact]
+        public void DontReturnResult_BirthdayPeopleOfTheDay_Today()
+        {
+            var noResultList = new List<Person>
+            {
+                new Person(0, "Name", "Surname", new DateTime(1234,12,21))
+            };
+            Assert.Contains("no person celebrating", BirthdayPeopleOfTheDay(noResultList));
         }
     }
 }

@@ -16,42 +16,17 @@ namespace Menu
             while (true)
             {
                 ok_Add = false;
-                //Console.WriteLine($"OK (false) : {ok_Add}");
-                //Console.ReadKey();
-                try { ClearScreen(false); } catch (Exception) { }
+                ClearScreen(false);
                 ShowMenuAddPeople();
                 var firstName = ReadString("firstName");
                 var surname = ReadString("surname");
                 var birthday = GetDate(resultList);
-                //var birthday = new Func<DateTime>(() =>
-                //{
-                //    var completeDate = "";
-                //    var finalDate = new DateTime();
-                //    do
-                //    {
-                //        var day = ReadNumber("day", resultList);
-                //        var month = ReadNumber("month", resultList);
-                //        var year = ReadNumber("year", resultList);
-                //        completeDate = year + "/" + month + "/" + day;
-                //        if (DateValidation(completeDate) == default)
-                //        {
-                //            Console.WriteLine("Invalid date.\nTry again.");
-                //            ClearScreen(false);
-                //        }
-                //        else
-                //        {
-                //            finalDate = ConvertToDateTimeObject(day, month, year)[0];
-                //        }
-                //    } while (DateValidation(completeDate) == default);
-                //    return finalDate;
-                //})();
-                //var person = new Person(Guid.NewGuid(), firstName, surname, birthday);
                 var person = new Person(id, firstName, surname, birthday);
-                try { ClearScreen(false); } catch (Exception) { }
-                var message = repository.AddPerson(person,Repository.peopleFromTextFile);
+                ClearScreen(false);
+                var message = repository.AddPerson(person, Repository.peopleFromTextFile);
                 if (message.Contains("Person added.")) { ok_Add = true; }
                 Console.WriteLine(message);
-                try { ClearScreen(true); } catch (Exception) { }
+                ClearScreen(true);
                 break;
             };
         }

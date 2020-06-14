@@ -8,7 +8,6 @@ namespace Database
 {
     public class Repository : IRepository
     {
-        //public static List<Person> people = new List<Person>();
         public static List<Person> peopleFromTextFile = new List<Person>();
 
         // CREATE -> xUnit [Fact] Create_AddPersonToList()
@@ -23,10 +22,8 @@ namespace Database
                                                            $"- Name: {person.FirstName} {person.Surname}\n    " +
                                                            $"- Birthday: {person.Birthday.ToShortDateString()}";
                 }
-                //peopleFromTextFile.Add(person); return TextFile.AppendTextToFile(person); }
             })();
         }
-
 
         // READ -> xUnit [Fact] Read_ReadPeople() 
         public IEnumerable<Person> ReadPeople(List<Person> peopleFromTextFile)
@@ -43,9 +40,7 @@ namespace Database
                 if (CheckContactExistence(result, peopleFromTextFile))
                 {
                     peopleFromTextFile[result.Id] = person;
-                    //ClearScreen(false);
-                    try { ClearScreen(false); } catch (Exception){ }
-                    //Console.Clear();
+                    ClearScreen(false);
                     return $"\nContact successfully updated." +
                            $"\n\n\nOld data:" +
                            $"\n\n  - Name: {result.FirstName} {result.Surname}\n  - Birthday: {result.Birthday.ToShortDateString()}" +
@@ -68,7 +63,7 @@ namespace Database
                 if (result != null && result.Id == id)
                 {
                     peopleFromTextFile.Remove(result);
-                    ReorganizeListObjectsIndex(id);
+                    ReorganizeListObjectsIndex(id, peopleFromTextFile);
                     return $"\n\n{result.FirstName} {result.Surname} successfully deleted.";
                 }
                 else
@@ -78,7 +73,8 @@ namespace Database
             })();
         }
 
-        public static void ReorganizeListObjectsIndex(int id)
+        // xUnit ReorganizeListObjectsIndex_Repository() 
+        public static void ReorganizeListObjectsIndex(int id, List<Person> peopleFromTextFile)
         {
             for (var i = peopleFromTextFile.Count - 1; i >= id; i--)
             {
@@ -86,6 +82,8 @@ namespace Database
             }
         }
 
+        // xUnit SearchPeople_SingleResult_Repository()
+        //       SearchPeople_MultipleResults_Repository() 
         public List<Person> SearchPeople(string termFirstName, string termSurname, List<Person> peopleFromTextFile)
         {
             var result = new List<Person>();
@@ -100,67 +98,24 @@ namespace Database
             return result;
         }
 
-        public Person SearchPersonById(int id, List<Person> peopleFromTextFile) 
-        {
-            foreach (var p in peopleFromTextFile) 
-            {
-                if (p.Id == id) { return p; }
-            }
-            return null;
-        }
-
-        // Return people who is celebrating birthday today
-        //public string BirthdayPeopleOfTheDay()
-        //{
-        //    var resultString = $"\nBirthday people of {DateTime.Today.ToLongDateString()}:\n";
-        //    IEnumerable<Person> result = (
-        //        from person in peopleFromTextFile
-        //        where person.Birthday.Day == DateTime.Today.Day && person.Birthday.Month == DateTime.Today.Month
-        //        select person
-        //        );
-        //    foreach (var person in result)
-        //    {
-        //        var plural = (DateTime.Today.Year - person.Birthday.Year != 1) ? "years" : "year";
-        //        resultString += $"\n - {person.FirstName} {person.Surname} :: {DateTime.Today.Year - person.Birthday.Year} {plural} old\n";
-        //    }
-        //    return !result.Any() ? $"\n{resultString}\n - There is no person celebrating birthday today." : resultString;
-        //}
-
-        //public int DateCountdown(string id)
-        //{
-        //    return new Func<int>(() => { return CalculateDays(SearchPerson(Parsing.StringToInt(id)[0])); })();
-        //}
-
+        // xUnit SearchPerson_Repository()
         public static Person SearchPerson(int id, List<Person> peopleFromTextFile)
         {
-            //var PersonObject = new Person();
             foreach (var match in peopleFromTextFile)
             {
                 if (match.Id == id) { return peopleFromTextFile[match.Id]; }
             }
             return null;
-
-            //var PersonObject = new Person();
-            //foreach (var match in people)
-            //{
-            //    if (match.Id == id) { PersonObject = people[match.Id]; }
-            //}
-            //return PersonObject;
         }
 
-        //public int CalculateDays(Person person)
-        //{
-        //    var nextBirthday = person.Birthday.AddYears(DateTime.Today.Year - person.Birthday.Year);
-        //    if (nextBirthday < DateTime.Today) { nextBirthday = nextBirthday.AddYears(1); }
-        //    return (nextBirthday - DateTime.Today).Days;
-        //}
-
-        public string PersonFullName(string id)
+        // xUnit PersonFullName_Repository()
+        public string PersonFullName(string id, List<Person> peopleFromTextFile)
         {
             var person = SearchPerson(Parsing.StringToInt(id)[0],peopleFromTextFile);
             return $"{person.FirstName} {person.Surname}";
         }
 
+        // xUnit CheckContactExistence_Repository()
         public static bool CheckContactExistence(Person person, List<Person> peopleFromTextFile)
         {
             return new Func<bool>(() =>
@@ -179,6 +134,7 @@ namespace Database
             })();
         }
 
+        // xUnit GenerateList_Repository()
         public static string GenerateList(Repository repository, List<Person> peopleFromTextFile)
         {
             var list = String.Empty;

@@ -9,7 +9,7 @@ namespace SystemWideOperations
         {
             if (returnType == true) { Console.WriteLine("\nPress any key to return..."); Console.ReadKey(); }
             Thread.Sleep(1000);
-            Console.Clear();
+            try { Console.Clear(); } catch (Exception) { };
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using People;
 using System;
 using Database;
+using System.Linq;
 using static Input.Dates;
 using static Input.Strings;
 using static Input.Numbers;
@@ -8,7 +9,6 @@ using System.Collections.Generic;
 using static Database.Repository;
 using static SystemWideOperations.Clear;
 using static SystemWideOperations.Parsing;
-using System.Linq;
 
 namespace Menu
 {
@@ -18,62 +18,39 @@ namespace Menu
         {
             while (true)
             {
-                //EditMenu(repository);
-                try { ClearScreen(false); } catch (Exception) { }
-                var returnedList = ShowMenuEditPeople(repository);
+                ClearScreen(false);
+                resultList = repository.ReadPeople(peopleFromTextFile).ToList();
+                var returnedList = ShowMenuEditPeople(repository, resultList);
                 if (returnedList.Contains("There is no person to edit.")) 
                 {
                     Console.WriteLine(returnedList);
-                    try { ClearScreen(true); } catch (Exception) { }
+                    ClearScreen(true);
                     break;
                 }
-                resultList = repository.ReadPeople(peopleFromTextFile).ToList();
-                Console.WriteLine(ShowMenuEditPeople(repository));
-                //Console.Write($"Enter with the ID of the desired person to edit: ");
+                Console.WriteLine(ShowMenuEditPeople(repository, resultList));
                 var numberID = StringToInt(ReadNumber("id_edit", resultList))[0];
-                try { ClearScreen(false); } catch (Exception) { }
+                ClearScreen(false);
                 Console.WriteLine(ShowPersonToEdit(numberID,repository,resultList));
                 var firstName = ReadString("new_firstName");
                 var surname = ReadString("new_surname");
                 var birthday = GetDate(resultList);
-
-                //var birthday = new Func<DateTime>(() =>
-                //{
-                //    var completeDate = "";
-                //    var finalDate = new DateTime();
-                //    do
-                //    {
-                //        var day = ReadNumber("day", resultList);
-                //        var month = ReadNumber("month", resultList);
-                //        var year = ReadNumber("year", resultList);
-                //        completeDate = year + "/" + month + "/" + day;
-                //        if (DateValidation(completeDate) == default)
-                //        {
-                //            Console.WriteLine("Invalid date.\nTry again.");
-                //            ClearScreen(false);
-                //        }
-                //        else
-                //        {
-                //            finalDate = ConvertToDateTimeObject(day, month, year)[0];
-                //        }
-                //    } while (DateValidation(completeDate) == default);
-                //    return finalDate;
-                //})();
                 Console.WriteLine(repository.UpdatePerson(new Person(numberID, firstName, surname, birthday), numberID, peopleFromTextFile));
-                try { ClearScreen(true); } catch (Exception) { }
+                ClearScreen(true);
                 break;
             };
         }
 
-        public static string ShowMenuEditPeople(Repository repository)
+        // xUnit ShowMenuEditPeople_Edit() 
+        public static string ShowMenuEditPeople(Repository repository, List<Person> peopleFromTextFile)
         {
             return repository.ReadPeople(peopleFromTextFile).ToList().Count == 0 ? "\nEdit a person:\n\nThere is no person to edit." :
                                                                                   $"\nEdit a person:\n\n{GenerateList(repository, peopleFromTextFile)}";
         }
 
+        // xUnit ShowPersonToEdit_Edit()
         public static string ShowPersonToEdit(int id, Repository repository, List<Person> resultList) 
         {
-            var person = repository.SearchPersonById(id, resultList);
+            var person = SearchPerson(id, resultList);
             return $"\n\nEdit {person.FirstName}:\n    " +
                    $"\n    Name: {person.FirstName}" +
                    $"\n    Surname: {person.Surname}" +

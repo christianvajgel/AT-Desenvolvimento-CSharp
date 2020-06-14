@@ -18,27 +18,28 @@ namespace Menu
             while (true)
             {
                 ok_Delete = false;
-                try { ClearScreen(false); } catch (Exception) { }
-                var returnedList = ShowMenuDeletePeople(repository);
+                ClearScreen(false);
+                resultList = repository.ReadPeople(peopleFromTextFile).ToList();
+                var returnedList = ShowMenuDeletePeople(repository, resultList);
                 if (returnedList.Contains("There is no person to delete."))
                 {
                     Console.WriteLine(returnedList);
-                    try { ClearScreen(true); } catch (Exception) { }
+                    ClearScreen(true);
                     break;
                 }
                 Console.WriteLine(returnedList);
-                //Console.Write($"Enter with the ID of the desired person to edit: ");
                 var numberID = StringToInt(ReadNumber("id_delete", resultList))[0];
-                try { ClearScreen(false); } catch (Exception) { }
+                ClearScreen(false);
                 var message = repository.DeletePerson(numberID,peopleFromTextFile);
                 Console.WriteLine(message);
-                try { ClearScreen(true); } catch (Exception) { }
+                ClearScreen(true);
                 if (!message.Equals("Person does not exists.")) { ok_Delete = true; }
                 break;
             }
         }
 
-        public static string ShowMenuDeletePeople(Repository repository)
+        // xUnit ShowMenuDeletePeople_Delete()
+        public static string ShowMenuDeletePeople(Repository repository, List<Person> peopleFromTextFile)
         {
             return repository.ReadPeople(peopleFromTextFile).ToList().Count == 0 ? "\nDelete a person:\n\nThere is no person to delete." :
                                                     $"\nDelete a person:\n\n{GenerateList(repository,peopleFromTextFile)}";
